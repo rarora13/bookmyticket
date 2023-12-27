@@ -1,5 +1,8 @@
 package in.simplygeek.theatre.entities;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,6 +25,7 @@ public class Address {
     
     @JoinColumn
     @ManyToOne
+    @Cascade(CascadeType.ALL)
     private City city;
     
     @Column

@@ -1,6 +1,5 @@
-package in.simplygeek.theatre.entities;
+package in.simplygeek.movie.entities;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -16,26 +15,23 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Seat {
+public class Actor {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(name = "seatNumber")
-	private String seatNumber;
-	
-	@Column(name = "row_no")
-	private String row;
-	
-	@Column(name = "status")
-	private String status;
-	
-	@Column(name = "type")
-	private String type;
-	
-	@Column(name = "price")
-	private BigDecimal price;
-	
 	@Column
-	private String seatUniqueId = UUID.randomUUID().toString();
+    private String name;
+    
+    @Column
+    private Boolean isMale;
+    
+    @Column
+    private String wikiLink;
+    
+    @Column
+    private String filmCity;
+    
+    @Column
+	private String actorUniqueId = UUID.randomUUID().toString();
 }

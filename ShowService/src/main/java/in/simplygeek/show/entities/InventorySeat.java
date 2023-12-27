@@ -1,4 +1,4 @@
-package in.simplygeek.theatre.entities;
+package in.simplygeek.show.entities;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -8,34 +8,45 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-public class Seat {
+@Table(name = "inventory")
+public class InventorySeat {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(name = "seatNumber")
+	@Column
 	private String seatNumber;
 	
 	@Column(name = "row_no")
 	private String row;
 	
-	@Column(name = "status")
-	private String status;
+	@Column
+	private Boolean status;
 	
-	@Column(name = "type")
+	@Column
+	private Long ticketId;
+	
+	@Column
 	private String type;
 	
-	@Column(name = "price")
+	@Column
 	private BigDecimal price;
 	
 	@Column
-	private String seatUniqueId = UUID.randomUUID().toString();
+	private Long seatId;
+	
+	
+	@Column
+	private String inventoryUniqueId = UUID.randomUUID().toString();
 }
