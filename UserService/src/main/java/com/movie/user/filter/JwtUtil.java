@@ -2,9 +2,9 @@ package com.movie.user.filter;
 
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.util.StringUtils;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 public class JwtUtil {
     private static final String AUTHORISATION_HEADER = "Authorization";

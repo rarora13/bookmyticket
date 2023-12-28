@@ -2,7 +2,6 @@ package com.movie.user.config;
 
 import java.util.Collections;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,8 @@ import org.springframework.web.cors.CorsConfiguration;
 
 import com.movie.user.constant.CommonConstant;
 import com.movie.user.filter.JwtRequestFilter;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Configuration
 @EnableWebSecurity
@@ -53,11 +54,11 @@ public class SecurityConfig {
                 .csrf().disable()
 
                 .authorizeHttpRequests(auth -> auth
-                		.mvcMatchers(HttpMethod.GET, "/").permitAll()
-                		.mvcMatchers(SWAGGER_UI).permitAll()
-                		.mvcMatchers(HttpMethod.POST,"/api/users/login").permitAll()
-                		.mvcMatchers(HttpMethod.POST,"/api/users/**").hasRole(CommonConstant.ROLE_ADMIN)
-                        .antMatchers( "/**").authenticated()
+                		.requestMatchers(HttpMethod.GET, "/").permitAll()
+                		.requestMatchers(SWAGGER_UI).permitAll()
+                		.requestMatchers(HttpMethod.POST,"/api/users/login").permitAll()
+                		.requestMatchers(HttpMethod.POST,"/api/users/**").hasRole(CommonConstant.ROLE_ADMIN)
+                        .requestMatchers( "/**").authenticated()
                 ).httpBasic(Customizer.withDefaults());
 
         return http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class).build();
