@@ -28,8 +28,6 @@ import com.movie.user.model.JwtResponse;
 import com.movie.user.repository.UserRepository;
 import com.movie.user.util.JwtTokenUtil;
 
-import io.swagger.v3.oas.annotations.Hidden;
-
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
