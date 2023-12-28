@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.simplygeek.movie.entities.Movie;
@@ -27,9 +28,15 @@ public class MovieController {
         this.movieService = movieService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<Movie>> getMovies() {
         List<Movie> movies = movieService.getMovies();
+        return ResponseEntity.ok().body(movies);
+    }
+    
+    @GetMapping()
+    public ResponseEntity<List<Movie>> getMovies(@RequestParam String title) {
+        List<Movie> movies = movieService.getMovieByTitle(title);
         return ResponseEntity.ok().body(movies);
     }
     

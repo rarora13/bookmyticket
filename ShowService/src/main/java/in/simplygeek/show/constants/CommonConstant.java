@@ -18,6 +18,7 @@ public final class CommonConstant {
     public static final String ROLE_ADMIN = "ADMIN";
     
     public static final String THEATRE_SERVICE_NAME = "theatre-service";
+    public static final String MOVIE_SERVICE_NAME = "movies-service";
 
 
     private CommonConstant() {}

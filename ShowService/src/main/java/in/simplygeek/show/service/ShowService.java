@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import in.simplygeek.show.bean.Movie;
 import in.simplygeek.show.bean.ShowRequest;
 import in.simplygeek.show.bean.Theatre;
 import in.simplygeek.show.bean.TheatreAudi;
@@ -21,14 +22,17 @@ public class ShowService {
     private final ShowRepository ShowRepository;
     private final InventoryService inventoryService;
     private final TheatreService theatreService;
+    private final MovieService movieService;
     
     @Autowired
     public ShowService(ShowRepository ShowRepository,
     		InventoryService inventoryService,
-    		TheatreService theatreService) {
+    		TheatreService theatreService,
+    		MovieService movieService) {
         this.ShowRepository = ShowRepository;
         this.inventoryService = inventoryService;
         this.theatreService = theatreService;
+        this.movieService = movieService;
     }
 
 	public List<Show> getShows() {
@@ -101,5 +105,10 @@ public class ShowService {
 							return audi;
 						}))
 				.collect(Collectors.toList());	
+	}
+	
+	public List<Movie> getMovieByTitle(String title){
+		
+		return movieService.getMovieByTitle(title);
 	}
 }
