@@ -1,5 +1,6 @@
 package in.simplygeek.show.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -104,11 +105,37 @@ public class ShowService {
 							audi.setGoogleLocationLink(theatre.getGoogleLocaltionLink());
 							return audi;
 						}))
-				.collect(Collectors.toList());	
+				.collect(Collectors.toList());
 	}
 	
 	public List<Movie> getMovieByTitle(String title){
 		
 		return movieService.getMovieByTitle(title);
+	}
+	
+	public List<Show> getShow(String title, String city){
+		List<Movie> movies = movieService.getMovieByTitle(title);
+		if(!movies.isEmpty()) {
+			/* Movie searched */
+			Movie movie = movies.get(0);
+			/* Theatres searched */
+			List<TheatreAudi> audis = theatreService.getTheatresByCity(city)
+					.stream()
+					.flatMap(theatre-> theatre.getAudis().stream()
+							.map(audi-> {
+								audi.setTheatreId(theatre.getId());
+								audi.setTheatreName(theatre.getName());
+								audi.setGoogleLocationLink(theatre.getGoogleLocaltionLink());
+								return audi;
+							}))
+					.collect(Collectors.toList());
+			
+			List<Long> audiIds = audis.stream().map(a-> {return a.getId();}).collect(Collectors.toList());
+			List<Show> shows = ShowRepository.findShow(movie.getId(), audiIds);
+			
+			return shows;
+		}
+		
+		return new ArrayList<Show>();
 	}
 }

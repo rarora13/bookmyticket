@@ -43,6 +43,13 @@ public class ShowController {
         return ResponseEntity.ok().body(show);
     }
     
+    @GetMapping
+    public ResponseEntity<List<Show>> getShowByMovieInCity(@RequestParam String cityName, 
+    		@RequestParam String title) {
+        List<Show> theatres = showService.getShow(title, cityName);
+        return ResponseEntity.ok().body(theatres);
+    }
+    
     @GetMapping("/theatres")
     public ResponseEntity<List<TheatreAudi>> getTheatresByCityName(@RequestParam String cityName) {
         List<TheatreAudi> theatres = showService.getTheatresByCity(cityName);
