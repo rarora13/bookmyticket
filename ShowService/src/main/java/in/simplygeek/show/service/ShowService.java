@@ -18,12 +18,15 @@ import jakarta.persistence.EntityNotFoundException;
 public class ShowService {
     private final ShowRepository ShowRepository;
     private final InventoryService inventoryService;
+    private final TheatreService theatreService;
     
     @Autowired
     public ShowService(ShowRepository ShowRepository,
-    		InventoryService inventoryService) {
+    		InventoryService inventoryService,
+    		TheatreService theatreService) {
         this.ShowRepository = ShowRepository;
         this.inventoryService = inventoryService;
+        this.theatreService = theatreService;
     }
 
 	public List<Show> getShows() {
@@ -35,9 +38,14 @@ public class ShowService {
 				orElseThrow(()-> new EntityNotFoundException("Show not found with id :"+id));
 	}
 
+
+	public List<TheatreSeat> getSeatsForShow(long audiId) {
+        return theatreService.getAudiSeats(audiId);
+		
+    }
 	public Show createShow(ShowRequest show) {
 		Show showEntity = new Show();
-		List<TheatreSeat> seats = inventoryService.getSeatsForShow(show.getAudiId());
+		List<TheatreSeat> seats = theatreService.getAudiSeats(show.getAudiId());
 		showEntity.setInventory(seats.stream().map((s)-> {
 			// Map TheatreSeat attributes to InventorySeat
             InventorySeat inventorySeat = new InventorySeat();

@@ -15,6 +15,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import in.simplygeek.show.config.DynamicHeaderFilter;
 import in.simplygeek.show.constants.CommonConstant;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -28,6 +29,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtTokenUtil jwtService;
+    
+    @Autowired
+    private DynamicHeaderFilter clientTokenManager; 
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -54,5 +58,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         authentication.setDetails(authDetails);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        clientTokenManager.setToken(token);
     }
 }

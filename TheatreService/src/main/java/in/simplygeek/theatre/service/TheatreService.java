@@ -55,4 +55,8 @@ public class TheatreService {
         // Delete the theater
         theaterRepository.delete(existingTheater);
 	}
+
+	public List<Theatre> getTheatresByCityName(String cityName) {
+		return theaterRepository.findTheatresByCityName(cityName);
+	}
 }

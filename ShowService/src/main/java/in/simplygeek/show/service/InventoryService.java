@@ -15,13 +15,10 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class InventoryService {
     private final SeatRepository SeatRepository;
-    private final TheatreService theatreService;
     
     @Autowired
-    public InventoryService(SeatRepository SeatRepository, 
-    		TheatreService theatreService) {
+    public InventoryService(SeatRepository SeatRepository) {
         this.SeatRepository = SeatRepository;
-        this.theatreService= theatreService;
     }
 
 	public List<InventorySeat> getSeats() {
@@ -58,9 +55,4 @@ public class InventoryService {
         // Delete the Seat
         SeatRepository.delete(existingSeat);
 	}
-	
-	public List<TheatreSeat> getSeatsForShow(long audiId) {
-        return theatreService.getAudiSeats(audiId);
-		
-    }
 }
