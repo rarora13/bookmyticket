@@ -1,12 +1,10 @@
 package in.simplygeek.show.service;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import in.simplygeek.show.bean.TheatreSeat;
 import in.simplygeek.show.entities.InventorySeat;
@@ -17,13 +15,13 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class InventoryService {
     private final SeatRepository SeatRepository;
-    private final RestTemplate restTemplate;
+    private final TheatreService theatreService;
     
     @Autowired
     public InventoryService(SeatRepository SeatRepository, 
-    		RestTemplate restTemplate) {
+    		TheatreService theatreService) {
         this.SeatRepository = SeatRepository;
-        this.restTemplate = restTemplate;
+        this.theatreService= theatreService;
     }
 
 	public List<InventorySeat> getSeats() {
@@ -62,13 +60,7 @@ public class InventoryService {
 	}
 	
 	public List<TheatreSeat> getSeatsForShow(long audiId) {
-        // Fetching Theatre service URL using Eureka
-        String theatreServiceName = "theatre-service"; // Replace with your registered service name in Eureka
-        String theatreServiceUrl = 	"http://"+theatreServiceName;//discoveryClient.getInstances(theatreServiceName).get(0).getUri().toString();
-
-        String seatsEndpoint = theatreServiceUrl +  "/audis/" + audiId + "/seats";
-
-        TheatreSeat[] seats = restTemplate.getForObject(seatsEndpoint, TheatreSeat[].class);
-		return Arrays.asList(seats);
+        return theatreService.getAudiSeats(audiId);
+		
     }
 }
