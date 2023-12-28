@@ -94,25 +94,6 @@ public class ShowService {
         ShowRepository.delete(existingShow);
 	}
 	
-	public List<TheatreAudi> getTheatresByCity(String city){
-		
-		return theatreService.getTheatresByCity(city)
-				.stream()
-				.flatMap(theatre-> theatre.getAudis().stream()
-						.map(audi-> {
-							audi.setTheatreId(theatre.getId());
-							audi.setTheatreName(theatre.getName());
-							audi.setGoogleLocationLink(theatre.getGoogleLocaltionLink());
-							return audi;
-						}))
-				.collect(Collectors.toList());
-	}
-	
-	public List<Movie> getMovieByTitle(String title){
-		
-		return movieService.getMovieByTitle(title);
-	}
-	
 	public List<Show> getShow(String title, String city){
 		List<Movie> movies = movieService.getMovieByTitle(title);
 		if(!movies.isEmpty()) {
