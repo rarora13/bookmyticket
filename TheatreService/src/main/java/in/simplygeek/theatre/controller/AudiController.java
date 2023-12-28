@@ -1,5 +1,7 @@
 package in.simplygeek.theatre.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.simplygeek.theatre.entities.Audi;
+import in.simplygeek.theatre.entities.Seat;
 import in.simplygeek.theatre.service.AudiService;
 
 @RestController
@@ -29,6 +32,12 @@ public class AudiController {
     public ResponseEntity<Audi> getAudiById(@PathVariable Long id) {
         Audi audi = audiService.getAudiById(id);
         return ResponseEntity.ok().body(audi);
+    }
+    
+    @GetMapping("/{id}/seats")
+    public ResponseEntity<List<Seat>> getSeats(@PathVariable Long id) {
+        Audi audi = audiService.getAudiById(id);
+        return ResponseEntity.ok().body(audi.getSeats());
     }
 
     @PostMapping

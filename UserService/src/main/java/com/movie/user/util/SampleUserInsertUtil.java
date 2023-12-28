@@ -27,13 +27,13 @@ public class SampleUserInsertUtil {
 			authorityRepository.saveAll(authorities);
 			
 			List<User> users = new ArrayList<>();
-			users.add(getUser("hituahuja", passwordEncoder.encode("hituahuja"), "hituahuja@gmail.com", authorities.get(1)));
-			users.add(getUser("haahuja121", passwordEncoder.encode("haahuja121"), "haahuja121@gmail.com", authorities.get(0)));
+			users.add(generateUser("Rakesh","Arora","rakesh", passwordEncoder.encode("admin"), "rarora13@gmail.com", authorities.get(1)));
+			users.add(generateUser("Rakesh","Arora","user", passwordEncoder.encode("user"), "user@gmail.com", authorities.get(0)));
 			repository.saveAll(users);
 		};
 	}
 	
-	private User getUser(String username, String password, String email, Authority authority) {
+	private User generateUser(String firstName, String lastName,String username, String password, String email, Authority authority) {
 		User user = new User();
 		user.setEmail(email);
 		user.setUsername(username);
@@ -41,8 +41,8 @@ public class SampleUserInsertUtil {
 		Set<Authority> authorities = new HashSet<Authority>();
 		authorities.add(authority);
 		user.setAuthorities(authorities);
-		user.setFirstName("Hitesh");
-		user.setLastName("Ahuja");
+		user.setFirstName(firstName);
+		user.setLastName(lastName);
 		user.setEnabled(true);
 		return user;
 	}

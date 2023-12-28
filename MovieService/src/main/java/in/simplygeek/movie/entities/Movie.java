@@ -1,4 +1,4 @@
-package in.simplygeek.theatre.entities;
+package in.simplygeek.movie.entities;
 
 
 
@@ -13,9 +13,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,29 +22,35 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Theatre {
+public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @Column
-    private String name;
- 
-    @OneToOne
-    @Cascade(CascadeType.ALL)
-    private Address address;
-    
-    @OneToMany
-    @Cascade(CascadeType.ALL)
-    private Set<Audi> audis;
+    private String title;
     
     @Column
-    private String googleLocaltionLink;
+    private String description;
+    
+    @Column
+    private String youtubeTrailerLink;
     
     @Column
     private Boolean status;
     
     @Column
-	private String theatreUniqueId = UUID.randomUUID().toString();
+    private String sensorBoardRating;
+    
+    @OneToMany
+    @Cascade(CascadeType.ALL)
+    private Set<Actor> actors;
+    
+    @OneToMany
+    @Cascade(CascadeType.ALL)
+    private Set<Rating> ratings;
+    
+    @Column
+	private String movieUniqueId = UUID.randomUUID().toString();
     
 }
