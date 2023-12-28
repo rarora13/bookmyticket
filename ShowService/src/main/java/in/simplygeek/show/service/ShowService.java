@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import in.simplygeek.show.bean.ShowRequest;
+import in.simplygeek.show.bean.Theatre;
+import in.simplygeek.show.bean.TheatreAudi;
 import in.simplygeek.show.bean.TheatreSeat;
 import in.simplygeek.show.entities.InventorySeat;
 import in.simplygeek.show.entities.Show;
@@ -85,5 +87,19 @@ public class ShowService {
 
         // Delete the Show
         ShowRepository.delete(existingShow);
+	}
+	
+	public List<TheatreAudi> getTheatresByCity(String city){
+		
+		return theatreService.getTheatresByCity(city)
+				.stream()
+				.flatMap(theatre-> theatre.getAudis().stream()
+						.map(audi-> {
+							audi.setTheatreId(theatre.getId());
+							audi.setTheatreName(theatre.getName());
+							audi.setGoogleLocationLink(theatre.getGoogleLocaltionLink());
+							return audi;
+						}))
+				.collect(Collectors.toList());	
 	}
 }
