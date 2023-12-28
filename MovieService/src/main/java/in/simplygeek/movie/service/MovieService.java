@@ -1,6 +1,7 @@
 package in.simplygeek.movie.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +54,11 @@ public class MovieService {
 
         // Delete the movie
         movieRepository.delete(existingmovie);
+	}
+	
+	public List<Movie> getMovieByTitle(String title) {
+		// Check if the movie with the given id exists in the database
+        return movieRepository.findMovieByTitle(title);
+
 	}
 }

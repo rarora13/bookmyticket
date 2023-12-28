@@ -1,5 +1,6 @@
 package in.simplygeek.show.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,7 +8,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import in.simplygeek.show.bean.Movie;
 import in.simplygeek.show.bean.ShowRequest;
+import in.simplygeek.show.bean.Theatre;
+import in.simplygeek.show.bean.TheatreAudi;
 import in.simplygeek.show.bean.TheatreSeat;
 import in.simplygeek.show.entities.InventorySeat;
 import in.simplygeek.show.entities.Show;
@@ -18,12 +22,18 @@ import jakarta.persistence.EntityNotFoundException;
 public class ShowService {
     private final ShowRepository ShowRepository;
     private final InventoryService inventoryService;
+    private final TheatreService theatreService;
+    private final MovieService movieService;
     
     @Autowired
     public ShowService(ShowRepository ShowRepository,
-    		InventoryService inventoryService) {
+    		InventoryService inventoryService,
+    		TheatreService theatreService,
+    		MovieService movieService) {
         this.ShowRepository = ShowRepository;
         this.inventoryService = inventoryService;
+        this.theatreService = theatreService;
+        this.movieService = movieService;
     }
 
 	public List<Show> getShows() {
@@ -35,9 +45,14 @@ public class ShowService {
 				orElseThrow(()-> new EntityNotFoundException("Show not found with id :"+id));
 	}
 
+
+	public List<TheatreSeat> getSeatsForShow(long audiId) {
+        return theatreService.getAudiSeats(audiId);
+		
+    }
 	public Show createShow(ShowRequest show) {
 		Show showEntity = new Show();
-		List<TheatreSeat> seats = inventoryService.getSeatsForShow(show.getAudiId());
+		List<TheatreSeat> seats = theatreService.getAudiSeats(show.getAudiId());
 		showEntity.setInventory(seats.stream().map((s)-> {
 			// Map TheatreSeat attributes to InventorySeat
             InventorySeat inventorySeat = new InventorySeat();
@@ -77,5 +92,50 @@ public class ShowService {
 
         // Delete the Show
         ShowRepository.delete(existingShow);
+	}
+	
+	public List<TheatreAudi> getTheatresByCity(String city){
+		
+		return theatreService.getTheatresByCity(city)
+				.stream()
+				.flatMap(theatre-> theatre.getAudis().stream()
+						.map(audi-> {
+							audi.setTheatreId(theatre.getId());
+							audi.setTheatreName(theatre.getName());
+							audi.setGoogleLocationLink(theatre.getGoogleLocaltionLink());
+							return audi;
+						}))
+				.collect(Collectors.toList());
+	}
+	
+	public List<Movie> getMovieByTitle(String title){
+		
+		return movieService.getMovieByTitle(title);
+	}
+	
+	public List<Show> getShow(String title, String city){
+		List<Movie> movies = movieService.getMovieByTitle(title);
+		if(!movies.isEmpty()) {
+			/* Movie searched */
+			Movie movie = movies.get(0);
+			/* Theatres searched */
+			List<TheatreAudi> audis = theatreService.getTheatresByCity(city)
+					.stream()
+					.flatMap(theatre-> theatre.getAudis().stream()
+							.map(audi-> {
+								audi.setTheatreId(theatre.getId());
+								audi.setTheatreName(theatre.getName());
+								audi.setGoogleLocationLink(theatre.getGoogleLocaltionLink());
+								return audi;
+							}))
+					.collect(Collectors.toList());
+			
+			List<Long> audiIds = audis.stream().map(a-> {return a.getId();}).collect(Collectors.toList());
+			List<Show> shows = ShowRepository.findShow(movie.getId(), audiIds);
+			
+			return shows;
+		}
+		
+		return new ArrayList<Show>();
 	}
 }

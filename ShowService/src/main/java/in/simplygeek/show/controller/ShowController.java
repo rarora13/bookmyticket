@@ -12,9 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import in.simplygeek.show.bean.Movie;
 import in.simplygeek.show.bean.ShowRequest;
+import in.simplygeek.show.bean.TheatreAudi;
 import in.simplygeek.show.entities.Show;
 import in.simplygeek.show.service.ShowService;
 
@@ -28,7 +31,7 @@ public class ShowController {
         this.showService = showService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<Show>> getShows() {
         List<Show> shows = showService.getShows();
         return ResponseEntity.ok().body(shows);
@@ -38,6 +41,25 @@ public class ShowController {
     public ResponseEntity<Show> getShowById(@PathVariable Long id) {
         Show show = showService.getShowById(id);
         return ResponseEntity.ok().body(show);
+    }
+    
+    @GetMapping
+    public ResponseEntity<List<Show>> getShowByMovieInCity(@RequestParam String cityName, 
+    		@RequestParam String title) {
+        List<Show> theatres = showService.getShow(title, cityName);
+        return ResponseEntity.ok().body(theatres);
+    }
+    
+    @GetMapping("/theatres")
+    public ResponseEntity<List<TheatreAudi>> getTheatresByCityName(@RequestParam String cityName) {
+        List<TheatreAudi> theatres = showService.getTheatresByCity(cityName);
+        return ResponseEntity.ok().body(theatres);
+    }
+    
+    @GetMapping("/movies")
+    public ResponseEntity<List<Movie>> getMoviesByTitle(@RequestParam String title) {
+        List<Movie> movies = showService.getMovieByTitle(title);
+        return ResponseEntity.ok().body(movies);
     }
 
     @PostMapping
