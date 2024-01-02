@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +29,8 @@ import com.movie.user.model.JwtRequest;
 import com.movie.user.model.JwtResponse;
 import com.movie.user.repository.UserRepository;
 import com.movie.user.util.JwtTokenUtil;
+
+import io.swagger.v3.oas.annotations.Hidden;
 
 @RestController
 @RequestMapping("/api/users")
@@ -57,25 +61,26 @@ public class UserController {
 		return ResponseEntity.ok(new JwtResponse(token));
 	}
 	
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping
 	public List<User> getAllUsers() {
 		return this.userRepository.findAll();
 	}
 
-//	@Hidden()
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/{id}")
 	public User getUserById(@PathVariable(value = "id") long userId) {
 		return this.userRepository.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException(CommonConstant.USER_NOT_FOUND_WITH_ID + userId));
 	}
 
-//	@Hidden()
+	
 	@PostMapping
 	public User createUser(@RequestBody User user) {
 		return this.userRepository.save(user);
 	}
 
-//	@Hidden()
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@PutMapping("/{id}")
 	public User updateUser(@RequestBody User user, @PathVariable("id") long userId) {
 		User existingUser = this.userRepository.findById(userId)
@@ -86,7 +91,7 @@ public class UserController {
 		return this.userRepository.save(existingUser);
 	}
 
-//	@Hidden()
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<User> deleteUser(@PathVariable("id") long userId) {
 		User existingUser = this.userRepository.findById(userId)

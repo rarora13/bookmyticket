@@ -10,7 +10,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,7 +47,11 @@ public class User {
 	@Column(name = "email")
 	private String email;
 
-	@JsonIgnore
-	@OneToMany(mappedBy="user", fetch=FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "user_authorities",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "authority_id")
+    )
 	private Set<Authority> authorities;
 }
