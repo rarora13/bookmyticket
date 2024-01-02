@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,18 +49,21 @@ public class ShowController {
         return ResponseEntity.ok().body(theatres);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<Show> createShow(@RequestBody ShowRequest show) {
         Show createdShow = showService.createShow(show);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdShow);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Show> updateShow(@PathVariable Long id, @RequestBody Show show) {
         Show updatedShow = showService.updateShow(id, show);
         return ResponseEntity.ok().body(updatedShow);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteShow(@PathVariable Long id) {
         showService.deleteShow(id);

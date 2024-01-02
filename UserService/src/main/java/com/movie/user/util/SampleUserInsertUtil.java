@@ -27,8 +27,8 @@ public class SampleUserInsertUtil {
 			authorityRepository.saveAll(authorities);
 			
 			List<User> users = new ArrayList<>();
-			users.add(generateUser("Rakesh","Arora","rakesh", passwordEncoder.encode("admin"), "rarora13@gmail.com", authorities.get(1)));
-			users.add(generateUser("Rakesh","Arora","user", passwordEncoder.encode("user"), "user@gmail.com", authorities.get(0)));
+			users.add(generateUser("Rakesh","Arora","rakesh", passwordEncoder.encode("admin"), "rarora13@gmail.com", authorities.get(0)));
+			users.add(generateUser("Rakesh","Arora","user", passwordEncoder.encode("user"), "user@gmail.com", authorities.get(1)));
 			repository.saveAll(users);
 		};
 	}

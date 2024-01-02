@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,24 +37,26 @@ public class AudiController {
     }
     
     @GetMapping("/{id}/seats")
-    @Secured("IS_ANONYMOUS")
     public ResponseEntity<List<Seat>> getSeats(@PathVariable Long id) {
         Audi audi = audiService.getAudiById(id);
         return ResponseEntity.ok().body(audi.getSeats());
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<Audi> createAudi(@RequestBody Audi audi) {
         Audi createdAudi = audiService.createAudi(audi);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdAudi);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Audi> updateAudi(@PathVariable Long id, @RequestBody Audi audi) {
         Audi updatedAudi = audiService.updateAudi(id, audi);
         return ResponseEntity.ok().body(updatedAudi);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAudi(@PathVariable Long id) {
         audiService.deleteAudi(id);

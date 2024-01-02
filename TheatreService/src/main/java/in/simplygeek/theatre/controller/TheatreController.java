@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,18 +47,21 @@ public class TheatreController {
         return ResponseEntity.ok().body(theatres);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<Theatre> createTheatre(@RequestBody Theatre theater) {
         Theatre createdTheatre = theaterService.createTheatre(theater);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTheatre);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Theatre> updateTheatre(@PathVariable Long id, @RequestBody Theatre theater) {
         Theatre updatedTheatre = theaterService.updateTheatre(id, theater);
         return ResponseEntity.ok().body(updatedTheatre);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTheatre(@PathVariable Long id) {
         theaterService.deleteTheatre(id);
